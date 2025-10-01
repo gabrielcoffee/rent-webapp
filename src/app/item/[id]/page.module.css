@@ -1,0 +1,304 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.main {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.notFound {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-600);
+}
+
+.notFound h1 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+}
+
+.notFound p {
+  margin-bottom: 24px;
+  font-size: 1.125rem;
+}
+
+.itemContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.itemImage {
+  width: 100%;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--gray-100);
+}
+
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  background-color: var(--gray-100);
+}
+
+.itemDetails {
+  padding: 20px 0;
+}
+
+.itemName {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.anuncianteInfo {
+  margin-bottom: 24px;
+}
+
+.anuncianteText {
+  font-size: 1rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.apartamento {
+  color: var(--gray-500);
+}
+
+.precosContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.precoCard {
+  padding: 8px 8px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.precoValor {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.precoPeriodo {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.observacoes {
+  margin-bottom: 24px;
+}
+
+.observacoes h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.observacoes p {
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+.avaliacoesResumo {
+  margin-bottom: 32px;
+  padding: 20px;
+  background-color: var(--gray-50);
+  border-radius: 8px;
+}
+
+.avaliacoesResumo h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.ratingSummary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ratingNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.ratingCount {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+}
+
+.alugarBtn {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background-color: #1bab50;
+  border: 1px solid #1bab50;
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.alugarBtn:hover {
+  transform: translateY(-1px);
+}
+
+.whatsappIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.avaliacoesSection {
+  margin-top: 40px;
+}
+
+.ratingSummary {
+  margin-bottom: 32px;
+}
+
+.ratingSummary h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+}
+
+.ratingSummaryContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: var(--gray-50);
+  border-radius: 8px;
+}
+
+.avaliacoesSection h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 24px;
+}
+
+.emptyAvaliacoes {
+  text-align: center;
+  padding: 40px;
+  color: var(--gray-600);
+  background-color: var(--gray-50);
+  border-radius: 8px;
+}
+
+.avaliacoesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.avaliacaoCard {
+  padding: 20px;
+}
+
+.avaliacaoHeader {
+  margin-bottom: 12px;
+}
+
+.avaliadorInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avaliadorName {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.avaliacaoStars {
+  display: flex;
+  align-items: center;
+}
+
+.avaliacaoComentario {
+  color: var(--gray-700);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 16px;
+  }
+  
+  .itemContainer {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .itemImage {
+    height: 300px;
+  }
+  
+  .itemName {
+    font-size: 2rem;
+  }
+  
+  .precosContainer {
+    grid-template-columns: 1fr;
+  }
+  
+  .ratingSummaryContent {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .avaliacoesSection h2,
+  .ratingSummary h2 {
+    font-size: 1.5rem;
+  }
+}
