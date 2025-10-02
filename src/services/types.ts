@@ -58,10 +58,7 @@ export interface DashboardStats {
   receita_mensal: Array<{
     mes: string;
     receita: number;
-  }>;
-  possivel_receita_mensal: Array<{
-    mes: string;
-    possivel_receita: number;
+    possivelReceita: number;
   }>;
   avaliacoes_medias: Array<{
     nome: string;

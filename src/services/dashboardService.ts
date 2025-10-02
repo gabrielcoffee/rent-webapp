@@ -41,9 +41,10 @@ export class DashboardService {
       const avaliacoes = avaliacoesResult.data || [];
 
       // Calcular dinheiro circulado
-      const dinheiroCirculado = locacoesPago.reduce((total, locacao) => {
+      const dinheiroCirculado = locacoesPago.reduce((total, locacao: any) => {
         const dias = this.calcularDias(locacao.data_inicio, locacao.data_fim);
-        const valor = dias * (locacao.item?.preco_diario || 0);
+        const precoDiario = Array.isArray(locacao.item) ? locacao.item[0]?.preco_diario : locacao.item?.preco_diario;
+        const valor = dias * (precoDiario || 0);
         return total + valor;
       }, 0);
 
@@ -57,14 +58,8 @@ export class DashboardService {
         return acc;
       }, { pago: 0, pendente: 0 });
 
-      // Calcular receita mensal
+      // Calcular receita mensal (inclui dinheiro circulado + possível receita 10%)
       const receitaMensal = this.calcularReceitaMensal(locacoesPago);
-
-      // Calcular possível receita (10%)
-      const possivelReceitaMensal = receitaMensal.map(item => ({
-        mes: item.mes,
-        possivel_receita: item.receita * 0.1
-      }));
 
       // Calcular médias de avaliações por item
       const avaliacoesMedias = this.calcularAvaliacoesMedias(avaliacoes);
@@ -76,7 +71,6 @@ export class DashboardService {
         dinheiro_circulado: dinheiroCirculado,
         status_locacoes: statusLocacoes,
         receita_mensal: receitaMensal,
-        possivel_receita_mensal: possivelReceitaMensal,
         avaliacoes_medias: avaliacoesMedias
       };
     } catch (error) {
@@ -92,21 +86,33 @@ export class DashboardService {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
   }
 
-  private static calcularReceitaMensal(locacoesPago: any[]): Array<{ mes: string; receita: number }> {
-    const mesesMap = new Map<string, number>();
+  private static calcularReceitaMensal(locacoesPago: any[]): Array<{ mes: string; receita: number; possivelReceita: number }> {
+    const mesesMap = new Map<string, { receita: number; possivelReceita: number }>();
 
-    locacoesPago.forEach(locacao => {
+    locacoesPago.forEach((locacao: any) => {
       const data = new Date(locacao.data_inicio);
       const mes = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}`;
       const dias = this.calcularDias(locacao.data_inicio, locacao.data_fim);
-      const valor = dias * (locacao.item?.preco_diario || 0);
+      const precoDiario = Array.isArray(locacao.item) ? locacao.item[0]?.preco_diario : locacao.item?.preco_diario;
+      const valor = dias * (precoDiario || 0);
+      const possivelReceita = valor * 0.1; // 10% da transação
       
-      mesesMap.set(mes, (mesesMap.get(mes) || 0) + valor);
+      if (!mesesMap.has(mes)) {
+        mesesMap.set(mes, { receita: 0, possivelReceita: 0 });
+      }
+      
+      const mesData = mesesMap.get(mes)!;
+      mesData.receita += valor;
+      mesData.possivelReceita += possivelReceita;
     });
 
     // Converter para array e ordenar
     return Array.from(mesesMap.entries())
-      .map(([mes, receita]) => ({ mes, receita }))
+      .map(([mes, dados]) => ({ 
+        mes, 
+        receita: dados.receita,
+        possivelReceita: dados.possivelReceita
+      }))
       .sort((a, b) => a.mes.localeCompare(b.mes))
       .slice(-12); // Últimos 12 meses
   }

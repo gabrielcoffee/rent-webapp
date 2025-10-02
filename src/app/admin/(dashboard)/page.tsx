@@ -67,8 +67,6 @@ export default function AdminDashboardPage() {
   ];
 
   const receitaMensal = stats.receita_mensal;
-  const possivelReceitaMensal = stats.possivel_receita_mensal;
-  const avaliacoesMedias = stats.avaliacoes_medias;
 
   return (
     <div className={styles.container}>
@@ -143,63 +141,27 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className={`card ${styles.chartCard}`}>
-            <h3>Receita Mensal</h3>
+            <h3>Dinheiro Circulado & Possível Receita (10%)</h3>
             <div className={styles.chartContainer}>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={receitaMensal}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="mes" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`R$ ${value}`, 'Receita']} />
-                  <Bar dataKey="receita" fill="var(--secondary-color)" />
+                  <Tooltip 
+                    formatter={(value, name) => [
+                      `R$ ${value}`, 
+                      name === 'receita' ? 'Dinheiro Circulado' : 'Possível Receita (10%)'
+                    ]} 
+                  />
+                  <Bar dataKey="receita" fill="var(--secondary-color)" name="receita" />
+                  <Bar dataKey="possivelReceita" fill="#22c55e" name="possivelReceita" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
         </div>
 
-        <div className={`grid grid-2 ${styles.chartsGrid}`}>
-          <div className={`card ${styles.chartCard}`}>
-            <h3>Possível Receita (10%)</h3>
-            <div className={styles.chartContainer}>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={possivelReceitaMensal}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="mes" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [`R$ ${value.toFixed(2)}`, 'Possível Receita']} />
-                  <Bar dataKey="possivelReceita" fill="var(--secondary-color)" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <div className={`card ${styles.chartCard}`}>
-            <h3>Avaliações dos Itens</h3>
-            <div className={styles.tableContainer}>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>Avaliação Média</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {avaliacoesMedias.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.nome}</td>
-                      <td>
-                        <span className={styles.rating}>
-                          ⭐ {item.media}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </main>
     </div>
   );

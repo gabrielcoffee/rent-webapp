@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import ItemCard, { ItemCardData } from '@/components/ItemCard';
 import Modal from '@/components/Modal';
+import { SimpleDateSelect } from '@/components/SimpleDateSelect';
 import { LocacoesService, ItensService, PessoasService } from '@/services';
 import { Locacao, Item, Pessoa } from '@/services/types';
 import styles from './page.module.css';
@@ -161,6 +162,14 @@ export default function AdminLocacoesPage() {
         return item.preco_diario * days;
     };
 
+    // Função para corrigir a exibição das datas (problema de timezone)
+    const formatDateForDisplay = (dateString: string) => {
+        if (!dateString) return '';
+        const date = new Date(dateString + 'T00:00:00'); // Força timezone local
+        return date.toLocaleDateString('pt-BR');
+    };
+
+
     if (loading && locacoes.length === 0) {
         return (
         <div className={styles.container}>
@@ -232,23 +241,26 @@ export default function AdminLocacoesPage() {
                 </div>
                 
                 <div>
-                    <label>Data Início *</label>
-                    <input
-                        
-                    type="date"
-                    className="input"
-                    value={formData.data_inicio || ''}
-                    onChange={(e) => setFormData({ ...formData, data_inicio: e.target.value })}
+                    <SimpleDateSelect
+                        label="Data Início"
+                        selectedDate={formData.data_inicio ? new Date(formData.data_inicio) : null}
+                        onDateChange={(date) => setFormData({ 
+                            ...formData, 
+                            data_inicio: date.toISOString().split('T')[0] 
+                        })}
+                        cantBeBeforeToday={false}
                     />
                 </div>
                 
                 <div>
-                    <label>Data Fim *</label>
-                    <input
-                    type="date"
-                    className="input"
-                    value={formData.data_fim || ''}
-                    onChange={(e) => setFormData({ ...formData, data_fim: e.target.value })}
+                    <SimpleDateSelect
+                        label="Data Fim"
+                        selectedDate={formData.data_fim ? new Date(formData.data_fim) : null}
+                        onDateChange={(date) => setFormData({ 
+                            ...formData, 
+                            data_fim: date.toISOString().split('T')[0] 
+                        })}
+                        cantBeBeforeToday={false}
                     />
                 </div>
                 
@@ -307,22 +319,22 @@ export default function AdminLocacoesPage() {
                                 key: 'data_inicio', 
                                 label: 'Período',
                                 render: (value, data) => 
-                                    `${new Date(data.data_inicio).toLocaleDateString('pt-BR')} - ${new Date(data.data_fim).toLocaleDateString('pt-BR')}`
+                                    `${formatDateForDisplay(data.data_inicio)} - ${formatDateForDisplay(data.data_fim)}`
                             },
                             { 
-                                key: 'data_inicio', 
+                                key: 'data_fim', 
                                 label: 'Dias',
                                 render: (value, data) => calculateTotalDays(data.data_inicio, data.data_fim)
                             },
                             { 
-                                key: 'item_id', 
+                                key: 'status_pagamento', 
                                 label: 'Valor Total',
                                 render: (value, data) => `R$ ${calculateTotalValue(data.item_id, data.data_inicio, data.data_fim).toFixed(2)}`
                             },
                             { 
-                                key: 'status_pagamento', 
+                                key: 'id', 
                                 label: 'Status',
-                                render: (value) => getStatusBadge(value)
+                                render: (value, data) => getStatusBadge(data.status_pagamento)
                             }
                         ]}
                     />
@@ -349,8 +361,7 @@ export default function AdminLocacoesPage() {
                                 <td>{getItemName(locacao.item_id)}</td>
                                 <td>{getLocatarioName(locacao.locatario_id)}</td>
                                 <td>
-                                    {new Date(locacao.data_inicio).toLocaleDateString('pt-BR')} - {' '}
-                                    {new Date(locacao.data_fim).toLocaleDateString('pt-BR')}
+                                    {formatDateForDisplay(locacao.data_inicio)} - {formatDateForDisplay(locacao.data_fim)}
                                 </td>
                                 <td>{calculateTotalDays(locacao.data_inicio, locacao.data_fim)}</td>
                                 <td>

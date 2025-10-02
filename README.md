@@ -80,7 +80,7 @@ rent-test/
 
 ### 📊 AdminDashboardPage (`/admin/`)
 - Visão geral do sistema com estatísticas
-- Gráficos de receita mensal, status de locações
+- Gráficos de dinheiro circulado e status de locações
 - Ranking de itens mais alugados
 - Média de avaliações por item
 

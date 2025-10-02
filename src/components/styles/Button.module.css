@@ -1,0 +1,96 @@
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: bold;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    font-size: 1rem;
+    /* make sure the text never breaks*/
+    white-space: nowrap;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.button:hover {
+    background-color: var(--color-primary-hover);
+}
+
+@media (min-width: 768px) {
+    .button {
+        font-weight: 500;
+    }
+}
+
+.not_available {
+    opacity: 0.4;
+}
+
+.button_full_white {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+}
+
+.button_full_white:hover {
+    background-color: var(--color-white-hover);
+}
+
+.button_soft_red {
+    background-color: var(--color-white);
+    color: var(--color-error);
+    border: 1px solid var(--color-error-border);
+}
+
+.button_soft_red:hover {
+    background-color: var(--color-slate-100);
+}
+
+.button_outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.button_outline:hover {
+    border-color: var(--color-primary-hover);
+}
+
+.button_text {
+    background-color: transparent;
+    color: var(--color-primary);
+}
+
+.button_text:hover {
+    color: var(--color-primary-hover);
+    background-color: transparent;
+}
+
+.button_left {
+    justify-content: flex-start;
+}
+
+.button_right {
+    justify-content: flex-end;
+}
+
+.button_center {
+    justify-content: center;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    width: 1.2rem;
+} 
