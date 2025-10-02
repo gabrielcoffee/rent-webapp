@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import ItemCard from '@/components/ItemCard';
 import Modal from '@/components/Modal';
-import { ItensService, PessoasService } from '@/services';
+import { ItensService, PessoasService, ImageUploadService } from '@/services';
 import { Item, Pessoa } from '@/services/types';
 import styles from './page.module.css';
 
@@ -19,6 +19,9 @@ export default function AdminItemsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     // Carregar dados do Supabase
     useEffect(() => {
@@ -76,12 +79,57 @@ export default function AdminItemsPage() {
         setShowForm(false);
         setEditingId(null);
         setFormData({});
+        setSelectedFile(null);
+        setImagePreview(null);
         } catch (err) {
         setError('Erro ao salvar item');
         console.error('Erro ao salvar item:', err);
         } finally {
         setSaving(false);
         }
+    };
+
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            
+            // Criar preview da imagem
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImagePreview(e.target?.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const uploadImage = async () => {
+        if (!selectedFile || !formData.nome_item) return;
+
+        try {
+            setUploadingImage(true);
+            setError(null);
+
+            const imageUrl = await ImageUploadService.uploadItemImage(selectedFile, formData.nome_item);
+            setFormData({ ...formData, foto_url: imageUrl });
+            
+            // Limpar estados de upload
+            setSelectedFile(null);
+            setImagePreview(null);
+            
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Erro no upload da imagem';
+            setError(errorMessage);
+            console.error('Erro no upload:', err);
+        } finally {
+            setUploadingImage(false);
+        }
+    };
+
+    const removeImage = () => {
+        setSelectedFile(null);
+        setImagePreview(null);
+        setFormData({ ...formData, foto_url: undefined });
     };
 
     const handleDelete = (item: Item) => {
@@ -113,6 +161,8 @@ export default function AdminItemsPage() {
         setShowForm(false);
         setEditingId(null);
         setFormData({});
+        setSelectedFile(null);
+        setImagePreview(null);
     };
 
     const getAnuncianteName = (anuncianteId: string) => {
@@ -199,14 +249,66 @@ export default function AdminItemsPage() {
                 </div>
                 
                 <div>
-                    <label>URL da Foto</label>
-                    <input
-                    type="url"
-                    className="input"
-                    value={formData.foto_url || ''}
-                    onChange={(e) => setFormData({ ...formData, foto_url: e.target.value })}
-                    placeholder="https://exemplo.com/foto.jpg"
-                    />
+                    <label>Foto do Item</label>
+                    
+                    {/* Preview da imagem atual */}
+                    {formData.foto_url && (
+                        <div className={styles.currentImagePreview}>
+                            <img src={formData.foto_url} alt="Imagem atual" className={styles.imagePreview} />
+                            <button 
+                                type="button"
+                                onClick={removeImage}
+                                className={styles.removeImageBtn}
+                            >
+                                Remover Imagem
+                            </button>
+                        </div>
+                    )}
+                    
+                    {/* Preview da nova imagem selecionada */}
+                    {imagePreview && !formData.foto_url && (
+                        <div className={styles.newImagePreview}>
+                            <img src={imagePreview} alt="Nova imagem" className={styles.imagePreview} />
+                            <div className={styles.imageActions}>
+                                <button 
+                                    type="button"
+                                    onClick={uploadImage}
+                                    disabled={uploadingImage || !formData.nome_item}
+                                    className="btn btn-primary"
+                                >
+                                    {uploadingImage ? 'Enviando...' : 'Enviar Imagem'}
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={() => {
+                                        setSelectedFile(null);
+                                        setImagePreview(null);
+                                    }}
+                                    className="btn btn-outline"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* Input de seleção de arquivo */}
+                    {!imagePreview && !formData.foto_url && (
+                        <div className={styles.fileUploadArea}>
+                            <input
+                                type="file"
+                                accept="image/png,image/jpeg,image/jpg,image/webp"
+                                onChange={handleFileSelect}
+                                className={styles.fileInput}
+                                id="image-upload"
+                            />
+                            <label htmlFor="image-upload" className={styles.fileUploadLabel}>
+                                <span>📷</span>
+                                <span>Clique para selecionar uma imagem</span>
+                                <small>PNG, JPEG, JPG, WebP (máx. 5MB)</small>
+                            </label>
+                        </div>
+                    )}
                 </div>
                 
                 <div className={styles.fullWidth}>

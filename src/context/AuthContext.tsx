@@ -36,15 +36,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-
-      // Redirecionar para dashboard após login
-      if (session?.user && _event === 'SIGNED_IN') {
-        router.push('/admin');
-      }
     });
 
     return () => subscription.unsubscribe();
-  }, [router]);
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({

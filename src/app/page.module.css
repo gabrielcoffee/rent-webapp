@@ -1,50 +1,942 @@
+@import url("https://fonts.googleapis.com/css2?family=Calistoga&display=swap");
+
 .container {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: var(--background-color);
+  color: var(--secondary-color);
+  font-family: Calistoga, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--background-color) 0%, var(--gray-100) 100%);
-}
-
-.hero {
-  text-align: center;
-  max-width: 600px;
-  padding: 40px 20px;
-}
-
-.title {
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 16px;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  font-size: 1.25rem;
-  color: var(--gray-600);
-  margin-bottom: 40px;
-  line-height: 1.6;
-}
-
-.actions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 18px;
+  padding: 20px 24px;
+  min-height: 70px;
+  background: var(--background-color);
+  border-bottom: 1px solid rgba(255, 236, 184, 0.15);
+  z-index: 1000;
 }
 
 @media (max-width: 768px) {
-  .title {
-    font-size: 3rem;
+    .header {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .headerMobile {
+        display: flex;
+    }
+}
+
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  position: absolute;
+  right: 24px;
+}
+
+.menuToggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--secondary-color);
+  margin: 3px 0;
+}
+
+.navMobile {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #8f2e2e;
+  border: 1px solid rgba(255, 236, 184, 0.15);
+  border-radius: 0 0 12px 12px;
+  padding: 16px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.navMobile.active {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.navLink {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 400;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.logoButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.logoButton img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: none;
+}
+
+/* Hero */
+.hero {
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin-top: 22vh;
+}
+
+.heroTitle {
+  display: block;
+  font-size: clamp(40px, 8vw, 96px);
+  line-height: 1.05;
+  font-weight: 300;
+  font-family: Calistoga, serif;
+}
+
+.heroSubtitle {
+  display: block;
+  margin-top: 24px;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.heroSearch {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 32px;
+  padding: 0 32px;
+}
+
+.heroSearch input {
+  width: min(300px, 75vw);
+  background: rgba(255, 236, 184, 0.12);
+  border: 1px solid rgba(255, 236, 184, 0.3);
+  color: var(--secondary-color);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+}
+
+.heroSearch input::placeholder {
+  color: var(--secondary-color);
+  opacity: 0.7;
+}
+
+.heroSearch button {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.heroButton {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.heroButtonOposite {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    border: 1px solid var(--secondary-color);
+} 
+
+.heroButtonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.fullButton,
+.outlineButton {
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--secondary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.outlineButton:hover {
+    background-color: #9a3838;
+    color: #fff0c6;
+    transform: translateY(-2px);
+}
+
+.fullButton {
+  background: var(--secondary-color);
+  color: #8f2e2e;
+}
+
+.outlineButton {
+    background: transparent;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Featured items section */
+.featuredItems {
+  position: relative;
+  width: 100%;
+  height: 350px;
+}
+
+.featuredItems img {
+  position: absolute;
+  width: 300px !important;
+  height: 200px !important;
+  object-fit: contain;
+  opacity: 0;
+  border-radius: 12px;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.featuredItems img:nth-child(1) {
+  top: 20px;
+  left: 20%;
+  transform: rotate(-8deg) translateY(40px);
+}
+
+.featuredItems img:nth-child(2) {
+  top: 80px;
+  left: 35%;
+  transform: rotate(12deg) translateY(40px);
+}
+
+.featuredItems img:nth-child(3) {
+  top: 60px;
+  right: 35%;
+  transform: rotate(-15deg) translateY(40px);
+}
+
+.featuredItems img:nth-child(4) {
+  top: 10px;
+  right: 20%;
+  transform: rotate(6deg) translateY(40px);
+}
+
+.featuredItems img.fadeIn:nth-child(1) {
+  opacity: 0.9;
+  transform: rotate(-8deg) translateY(0);
+}
+
+.featuredItems img.fadeIn:nth-child(2) {
+  opacity: 0.9;
+  transform: rotate(12deg) translateY(0);
+}
+
+.featuredItems img.fadeIn:nth-child(3) {
+  opacity: 0.9;
+  transform: rotate(-15deg) translateY(0);
+}
+
+.featuredItems img.fadeIn:nth-child(4) {
+  opacity: 0.9;
+  transform: rotate(6deg) translateY(0);
+}
+
+/* Banner de categorias */
+.categoriesBanner {
+  width: 100%;
+  margin-top: 64px;
+  overflow: hidden;
+  background: var(--secondary-color);
+  color: #8f2e2e;
+}
+
+.marquee {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 52px;
+}
+
+.marqueeTrack {
+  display: inline-flex;
+  gap: 28px;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marqueeScroll 60s linear infinite;
+}
+
+.bannerItem {
+  color: #8f2e2e;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
   }
-  
-  .subtitle {
-    font-size: 1.125rem;
+  100% {
+    transform: translateX(-100%);
   }
-  
-  .actions {
+}
+
+/* Seções de conteúdo */
+.section {
+  width: 100%;
+  max-width: 1000px;
+  margin: 56px auto 56px;
+  padding: 0 20px;
+}
+
+.sectionHeader {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+#como-funciona .sectionHeader {
+  text-align: center;
+  margin-top: 32px;
+}
+
+#por-que-rent .sectionHeader {
+  text-align: center;
+}
+
+.kicker {
+  display: inline-block;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.section h2 {
+  font-family: Calistoga, serif;
+  font-size: clamp(22px, 3.5vw, 32px);
+  letter-spacing: 0.3px;
+  margin-bottom: 16px;
+  color: var(--secondary-color);
+  font-weight: 400;
+}
+
+.section p {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* Steps linha horizontal */
+.stepsGrid {
+  display: flex;
+  gap: 16px;
+  max-width: 1000px;
+  margin: 28px auto 0;
+  overflow-x: auto;
+  padding-bottom: 40px;
+}
+
+.stepItem {
+  flex: 1;
+  min-width: 220px;
+  text-align: center;
+  padding: 20px 16px;
+}
+
+.stepItem h3 {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 12px 0 8px;
+}
+
+.stepItem p {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  color: #8f2e2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  margin: 0 auto 12px;
+}
+
+.stepIcon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 12px;
+}
+
+.stepHeader {
+  background: rgba(255, 236, 184, 0.12);
+  border: 2px solid rgba(255, 236, 184, 0.3);
+  position: relative;
+}
+
+.stepHeader::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -8px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid rgba(255, 236, 184, 0.3);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  transform: translateY(-50%);
+}
+
+.stepsGrid + .stepsGrid {
+  margin-top: 24px;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.feature {
+  background: rgba(255, 236, 184, 0.06);
+  border: 1px solid rgba(255, 236, 184, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.featureIco {
+  font-size: 28px;
+}
+
+/* Layout com imagem */
+.contentWithImage {
+    display: flex;
     flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    max-width: 900px;
+    margin: 28px auto 0;
+}
+
+.textContent {
+  flex: 1;
+}
+
+.textContent p {
+  margin-bottom: 16px;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.imageContent {
+  flex: 0 0 400px;
+}
+
+.imageContent img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.imageContentText {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.imageContentText strong {
+  font-weight: 700;
+}
+
+.socios {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.socioCard {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    width: 200px;
+    padding: 1rem;
+    font-size: 12px;
+    background: rgba(255, 236, 184, 0.06);
+    border: 1px solid rgba(255, 236, 184, 0.15);
+    border-radius: 12px;
+}
+
+.socioCard img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) { 
+  .socios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .socioCard {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 7px;
+  }
+  
+  .socioCard img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 8px;
+  }
+  
+  .socioNome {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  
+  .socioDesc {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+}
+
+.socioNome {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--secondary-color);
+  margin-bottom: 6px;
+}
+
+.socioDesc {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 11px;
+  color: var(--secondary-color);
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+/* Links de contato */
+#contato a {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+
+/* Contato */
+.contactFlex {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.contactCard {
+  flex: 1 1 260px;
+  min-width: 240px;
+  background: rgba(255, 236, 184, 0.08);
+  border: 1px solid rgba(255, 236, 184, 0.2);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.contactForm {
+  flex: 2 1 360px;
+  min-width: 280px;
+  background: rgba(255, 236, 184, 0.08);
+  border: 1px solid rgba(255, 236, 184, 0.2);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.field input,
+.field textarea {
+  background: rgba(255, 236, 184, 0.12);
+  border: 1px solid rgba(255, 236, 184, 0.3);
+  color: var(--secondary-color);
+  padding: 12px 16px;
+  border-radius: 10px;
+  outline: none;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 15px;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--secondary-color);
+  opacity: 0.6;
+}
+
+/* FAQ */
+.faq {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.faq details {
+  background: rgba(255, 236, 184, 0.08);
+  border: 1px solid rgba(255, 236, 184, 0.2);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.faq summary {
+  padding: 20px 24px;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq details p {
+  padding: 0 24px 20px;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.faqToggleContainer {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.faqToggleBtn {
+  background: none;
+  border: none;
+  color: var(--secondary-color);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 12px 0;
+}
+
+.faqHidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.faqHidden.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Footer Styles */
+.footer {
+  width: 100%;
+  background: #8f2e2e;
+}
+
+.footerContent {
+  background: #8f2e2e;
+  padding: 40px 20px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footerMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.footerLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.footerLogo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.footerLogo img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.footerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footerNavLink {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 8px 0;
+}
+
+.footerRight {
+  display: flex;
+  align-items: flex-start;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--secondary-color);
+  background: rgba(255, 236, 184, 0.08);
+  border: 1px solid rgba(255, 236, 184, 0.15);
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.footerBrand {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.brandName {
+  font-family: Calistoga, serif;
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  color: var(--secondary-color);
+  margin: 0;
+  line-height: 1;
+}
+
+.footerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 236, 184, 0.15);
+}
+
+.copyright,
+.licenses {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.licenses {
+  cursor: pointer;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 20px;
+    min-height: 60px;
+    justify-content: space-between;
+  }
+
+  .header .navLink:not(.navMobile .navLink) {
+    display: none;
+  }
+
+  .menuToggle {
+    display: flex;
+    position: static;
+  }
+
+  .container {
+    padding: 80px 0px 0px;
+  }
+
+  .hero {
+    margin-top: 4vh;
+  }
+
+  .heroTitle {
+    margin-top: 3rem;
+  }
+
+  .featuredItems {
+    display: none;
+  }
+
+  .contentWithImage {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .imageContent {
+    flex: none;
+  }
+
+  .socios {
+    flex: none;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .stepsGrid {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stepItem {
+    min-width: auto;
+  }
+
+  .stepHeader::after {
+    display: none;
+  }
+
+  .footerMain {
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footerLeft {
     align-items: center;
   }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .brandName {
+    font-size: clamp(36px, 10vw, 72px);
+  }
+}
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contactLink {
+    color: var(--secondary-color);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-weight: 700;
+    text-align: right;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
 }

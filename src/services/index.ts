@@ -4,6 +4,7 @@ export { ItensService } from './itensService';
 export { LocacoesService } from './locacoesService';
 export { AvaliacoesService } from './avaliacoesService';
 export { DashboardService } from './dashboardService';
+export { ImageUploadService } from './imageUploadService';
 
 // Exportar tipos
 export * from './types';

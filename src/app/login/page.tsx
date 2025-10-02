@@ -22,9 +22,11 @@ export default function LoginPage() {
     
     if (error) {
       setError('Email ou senha incorretos');
+      setLoading(false);
+    } else {
+      // Login bem-sucedido, redirecionar para admin
+      router.push('/admin');
     }
-    
-    setLoading(false);
   };
 
   return (
