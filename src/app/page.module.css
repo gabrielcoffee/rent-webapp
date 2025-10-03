@@ -2,33 +2,33 @@
 
 .container {
   min-height: 100vh;
+  background-color: var(--landing-background-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  background: var(--landing-background-color);
   color: var(--landing-primary-color);
   font-family: Calistoga, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.logoImage {
+    width: 60px;
+    height: 60px;
+}
+
 .logoText {
-  font-size: 24px;
-  font-weight: 700;
   color: var(--landing-primary-color);
   text-decoration: none;
   margin-left: 10px;
-  text-decoration: none;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 2rem;
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {
   .logoText {
-    font-size: 18px;
+    font-size: 1.5rem;
     margin-left: 8px;
   }
 }
@@ -450,8 +450,7 @@ background-color: var(--landing-background-color-hover);
 
 .stepItem h3 {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 400;
   margin: 12px 0 8px;
 }
 

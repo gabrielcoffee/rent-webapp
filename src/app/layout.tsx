@@ -11,22 +11,18 @@ const calistoga = Calistoga({
 })
 
 export const metadata: Metadata = {
-  title: 'Rent - Sistema de Aluguel C2C',
+  title: 'Rent - Alugue, Ganhe e Economize',
   description: 'Plataforma de aluguel de itens entre pessoas',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="pt-BR">
-      <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </body>
-    </html>
-  )
+export default function RootLayout({children }: { children: React.ReactNode }) {
+    return (
+        <html lang="pt-BR">
+            <body>
+                <AuthProvider>
+                {children}
+                </AuthProvider>
+            </body>
+        </html>
+    )
 }
