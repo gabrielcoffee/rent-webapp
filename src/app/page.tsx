@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, type FormEvent } from "react"
 import styles from "./page.module.css"
 import Image from "next/image"
-import { List, MessageCircle } from "lucide-react"
+import { List, Menu, MessageCircle } from "lucide-react"
 
 export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -78,10 +78,10 @@ export default function HomePage() {
 
   return (
     <>
-      <div className={styles.container}>
+    <div className={styles.container}>
         <div className={styles.header}>
-                
-            <div className={styles.navLinks}>
+
+            <div className={styles.headerItem}>
                 <a href="#como-funciona" className={styles.navLink}>
                     Como Funciona
                 </a>
@@ -90,19 +90,21 @@ export default function HomePage() {
                 </a>
             </div>
 
+            <div className={styles.headerItemMiddle}>
+                <a
+                    className={styles.logoButton}
+                    href="#"
+                    onClick={(e) => {
+                    e.preventDefault()
+                    scrollToTop()
+                    }}
+                >
+                    <Image width={80} height={80} src="/assets/logo.png" alt="logo Rent" />
+                    <span className={styles.logoText}>Rent Brasil</span>
+                </a>
+            </div>
 
-            <a
-                className={styles.logoButton}
-                href="#"
-                onClick={(e) => {
-                e.preventDefault()
-                scrollToTop()
-                }}
-            >
-                <Image width={80} height={80} src="/assets/logo.png" alt="logo Rent" />
-            </a>
-
-            <div className={styles.navLinks}>
+            <div className={styles.headerItem}>
                 <a href="#sobre-nos" className={styles.navLink}>
                     Sobre Nós
                 </a>
@@ -113,7 +115,19 @@ export default function HomePage() {
         </div>
 
         <div className={styles.headerMobile}>
-        <button
+          <a
+            className={styles.logoButton}
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              scrollToTop()
+            }}
+          >
+            <Image width={60} height={60} src="/assets/logo.png" alt="logo Rent" />
+            <span className={styles.logoText}>Rent Brasil</span>
+          </a>
+
+          <button
             className={styles.menuToggle}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Abrir menu"
