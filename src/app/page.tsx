@@ -27,6 +27,10 @@ export default function HomePage() {
     })
   }, [])
 
+  useEffect(() => {
+    document.body.style.backgroundColor = '#8e2f30';
+  }, []);
+
   // Scroll effects
   useEffect(() => {
     const handleScroll = () => {
