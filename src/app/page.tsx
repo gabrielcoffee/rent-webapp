@@ -385,13 +385,13 @@ export default function HomePage() {
 
               <div className={styles.socioCard}>
                 <Image src="/assets/syd.png" alt="Foto da Equipe Rent" width={120} height={120} />
-                <div className={styles.socioNome}>Sydnei Netto</div>
+                <div className={styles.socioNome}>Sydnei Neto</div>
                 <div className={styles.socioDesc}>Oficial de Intendência do Exército Brasileiro, certificado CPA-20. Com formação em Administração, especialista em gestão financeira e gestão logístico-operacional.</div>
               </div>
 
               <div className={styles.socioCard}>
                 <Image src="/assets/gab.jpeg" alt="Foto da Equipe Rent" width={120} height={120} />
-                <div className={styles.socioNome}>Gabriel Fernandes</div>
+                <div className={styles.socioNome}>Gabriel Fernandes Pereira</div>
                 <div className={styles.socioDesc}>Bacharel em Engenharia de Software (PUC-PR), desenvolvedor full stack com experiência em arquitetura e soluções escaláveis.</div>
               </div>
 
@@ -575,6 +575,11 @@ export default function HomePage() {
               </p>
             </div>
           </div>
+          <div className={styles.heroButtonContainer}>
+                <a className={styles.heroButton} href="https://wa.me/5541987865005?text=Olá gostaria de anunciar um item para aluguel." target="_blank" rel="noopener noreferrer">
+                    <button className={styles.outlineButton}><MessagesSquare size={20} />Anuncie conosco!</button>
+                </a>
+            </div>
         </section>
       </div>
 
@@ -634,6 +639,9 @@ export default function HomePage() {
                 </a>
                 <a href="#contato" className={styles.footerNavLink}>
                   Contato
+                </a>
+                <a href="https://wa.me/5541987865005?text=Olá gostaria de anunciar um item para aluguel." target="_blank" rel="noopener noreferrer" className={styles.footerNavLink}>
+                  Anuncie conosco!
                 </a>
               </nav>
             </div>

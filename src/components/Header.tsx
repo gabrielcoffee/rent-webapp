@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, BarChart3, Users, Package, Calendar, LogOut } from 'lucide-react';
+import { Menu, X, BarChart3, Users, Package, Calendar, Star, LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './styles/Header.module.css';
 
@@ -85,6 +85,13 @@ export default function Header({
                 <Calendar size={16} />
                 Locações
               </Link>
+              <Link 
+                href="/admin/avaliacoes" 
+                className={`${styles.navLink} ${pathname === '/admin/avaliacoes' ? styles.active : ''}`}
+              >
+                <Star size={16} />
+                Avaliações
+              </Link>
             </nav>
             
             {user && (
@@ -149,6 +156,14 @@ export default function Header({
               >
                 <Calendar size={16} />
                 Locações
+              </Link>
+              <Link 
+                href="/admin/avaliacoes" 
+                className={`${styles.mobileNavLink} ${pathname === '/admin/avaliacoes' ? styles.active : ''}`}
+                onClick={closeMobileMenu}
+              >
+                <Star size={16} />
+                Avaliações
               </Link>
               
               {user && (
