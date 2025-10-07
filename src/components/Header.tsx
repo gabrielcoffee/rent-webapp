@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, BarChart3, Users, Package, Calendar, Star, LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './styles/Header.module.css';
+import Image from 'next/image';
 
 interface HeaderProps {
   showAdminNav?: boolean;
@@ -33,9 +34,12 @@ export default function Header({
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <Link href="/" className={styles.logo} onClick={closeMobileMenu}>
-          Rent Brasil
-        </Link>
+        <div className={styles.logoContainer}>
+            <Image width={50} height={50} className={styles.logoImage} src="/assets/rent-icon-black.png" alt="logo Rent Black" />
+            <Link href="/" className={styles.logo} onClick={closeMobileMenu}>
+            Rent Brasil
+            </Link>
+        </div>
         
         {showBackButton ? (
           <>

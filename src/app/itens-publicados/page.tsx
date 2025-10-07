@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { ItensService, PessoasService, AvaliacoesService } from '@/services';
 import { Item, Pessoa, Avaliacao } from '@/services/types';
 import styles from './page.module.css';
+import Image from 'next/image';
 
 export default function ItemsPublicadosPage() {
     const [itens, setItens] = useState<Item[]>([]);
@@ -134,9 +135,13 @@ export default function ItemsPublicadosPage() {
         <div className={styles.container}>
         <header className={styles.header}>
             <div className={styles.headerContent}>
-            <Link href="/" className={styles.logo}>
-                Rent Brasil
-            </Link>
+
+                
+                <Image width={50} height={50} className={styles.logoImage} src="/assets/rent-icon-black.png" alt="logo Rent Black" />
+
+                <Link href="/" className={styles.logo}>
+                    Rent Brasil
+                </Link>
             </div>
         </header>
         
