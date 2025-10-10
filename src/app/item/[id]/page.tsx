@@ -75,6 +75,24 @@ export default function ItemPage() {
   const anunciante = pessoas.find(p => p.id === item.anunciante_id);
   const itemAvaliacoes = avaliacoes;
   
+  const categorias: { [key: string]: string } = {
+    'eletronicos_e_acessorios': 'Eletrônicos e Acessórios',
+    'ferramentas_e_equipamentos': 'Ferramentas e Equipamentos',
+    'esportes_e_lazer': 'Esportes e Lazer',
+    'festas_e_eventos': 'Festas e Eventos',
+    'moda_e_acessorios': 'Moda e Acessórios',
+    'casa_e_jardim': 'Casa e Jardim',
+    'brinquedos_e_jogos': 'Brinquedos e Jogos',
+    'instrumentos_musicais': 'Instrumentos Musicais',
+    'transporte_e_mobilidade': 'Transporte e Mobilidade',
+    'outro': 'Outro'
+  };
+
+  const getCategoriaFormatada = (categoria: string | undefined) => {
+    if (!categoria) return 'não foi definida';
+    return categorias[categoria] || 'não foi definida';
+  };
+  
   const getAvaliadorName = (avaliadorId: string) => {
     const avaliador = pessoas.find(p => p.id === avaliadorId);
     return avaliador ? avaliador.nome_pessoa : 'Anônimo';
@@ -130,7 +148,7 @@ export default function ItemPage() {
           
           <div className={styles.itemDetails}>
             <h1 className={styles.itemName}>{item.nome_item}</h1>
-
+            <p className={styles.categoria}>Categoria: {getCategoriaFormatada(item.categoria)}</p>
 
             {item.observacoes && (
               <div className={styles.observacoes}>

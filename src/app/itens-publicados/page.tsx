@@ -12,9 +12,24 @@ export default function ItemsPublicadosPage() {
     const [pessoas, setPessoas] = useState<Pessoa[]>([]);
     const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
     const [filtro, setFiltro] = useState('');
-    const [ordenacao, setOrdenacao] = useState<'nome' | 'preco' | 'avaliacao'>('nome');
+    const [ordenacao, setOrdenacao] = useState<'nome' | 'preco' | 'avaliacao'>('preco');
+    const [categoriaFiltro, setCategoriaFiltro] = useState<string>('todas');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const categorias = {
+        'todas': 'Todas as categorias',
+        'eletronicos_e_acessorios': 'Eletrônicos e Acessórios',
+        'ferramentas_e_equipamentos': 'Ferramentas e Equipamentos',
+        'esportes_e_lazer': 'Esportes e Lazer',
+        'festas_e_eventos': 'Festas e Eventos',
+        'moda_e_acessorios': 'Moda e Acessórios',
+        'casa_e_jardim': 'Casa e Jardim',
+        'brinquedos_e_jogos': 'Brinquedos e Jogos',
+        'instrumentos_musicais': 'Instrumentos Musicais',
+        'transporte_e_mobilidade': 'Transporte e Mobilidade',
+        'outro': 'Outro'
+    };
 
     useEffect(() => {
         loadData();
@@ -59,10 +74,12 @@ export default function ItemsPublicadosPage() {
     };
 
     const itensFiltrados = itens
-        .filter(item => 
-        item.nome_item.toLowerCase().includes(filtro.toLowerCase()) ||
-        item.observacoes?.toLowerCase().includes(filtro.toLowerCase())
-        )
+        .filter(item => {
+            const matchesSearch = item.nome_item.toLowerCase().includes(filtro.toLowerCase()) ||
+                item.observacoes?.toLowerCase().includes(filtro.toLowerCase());
+            const matchesCategory = categoriaFiltro === 'todas' || item.categoria === categoriaFiltro;
+            return matchesSearch && matchesCategory;
+        })
         .sort((a, b) => {
         switch (ordenacao) {
             case 'preco':
@@ -172,6 +189,19 @@ export default function ItemsPublicadosPage() {
                 <option value="nome">Nome</option>
                 <option value="preco">Preço</option>
                 <option value="avaliacao">Avaliação</option>
+                </select>
+            </div>
+
+            <div className={styles.sortBox}>
+                <label>Categoria:</label>
+                <select
+                className="input"
+                value={categoriaFiltro}
+                onChange={(e) => setCategoriaFiltro(e.target.value)}
+                >
+                {Object.entries(categorias).map(([key, value]) => (
+                    <option key={key} value={key}>{value}</option>
+                ))}
                 </select>
             </div>
             </div>

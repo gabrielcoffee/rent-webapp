@@ -13,6 +13,7 @@ export interface Item {
   foto_url?: string;
   preco_diario: number;
   observacoes?: string;
+  categoria?: string;
 }
 
 export interface Locacao {

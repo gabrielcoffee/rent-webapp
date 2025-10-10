@@ -23,6 +23,19 @@ export default function AdminItemsPage() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+    const categorias = {
+        'eletronicos_e_acessorios': 'Eletrônicos e Acessórios',
+        'ferramentas_e_equipamentos': 'Ferramentas e Equipamentos',
+        'esportes_e_lazer': 'Esportes e Lazer',
+        'festas_e_eventos': 'Festas e Eventos',
+        'moda_e_acessorios': 'Moda e Acessórios',
+        'casa_e_jardim': 'Casa e Jardim',
+        'brinquedos_e_jogos': 'Brinquedos e Jogos',
+        'instrumentos_musicais': 'Instrumentos Musicais',
+        'transporte_e_mobilidade': 'Transporte e Mobilidade',
+        'outro': 'Outro'
+    };
+
     // Carregar dados do Supabase
     useEffect(() => {
         loadData();
@@ -170,6 +183,11 @@ export default function AdminItemsPage() {
         return anunciante ? anunciante.nome_pessoa : 'N/A';
     };
 
+    const getCategoriaFormatada = (categoria: string | undefined) => {
+        if (!categoria) return '-';
+        return categorias[categoria as keyof typeof categorias] || '-';
+    };
+
     if (loading && itens.length === 0) {
         return (
         <div className={styles.container}>
@@ -246,6 +264,20 @@ export default function AdminItemsPage() {
                     onChange={(e) => setFormData({ ...formData, preco_diario: parseFloat(e.target.value) })}
                     placeholder="0.00"
                     />
+                </div>
+
+                <div>
+                    <label>Categoria</label>
+                    <select
+                    className="input"
+                    value={formData.categoria || ''}
+                    onChange={(e) => setFormData({ ...formData, categoria: e.target.value })}
+                    >
+                    <option value="">Selecione uma categoria</option>
+                    {Object.entries(categorias).map(([key, value]) => (
+                        <option key={key} value={key}>{value}</option>
+                    ))}
+                    </select>
                 </div>
                 
                 <div>
@@ -360,6 +392,11 @@ export default function AdminItemsPage() {
                                 label: 'Preço Diário',
                                 render: (value) => `R$ ${Number(value).toFixed(2)}`
                             },
+                            { 
+                                key: 'categoria', 
+                                label: 'Categoria',
+                                render: (value) => getCategoriaFormatada(value)
+                            },
                             { key: 'observacoes', label: 'Observações' }
                         ]}
                         imageField="foto_url"
@@ -379,6 +416,7 @@ export default function AdminItemsPage() {
                             <th>Nome</th>
                             <th>Anunciante</th>
                             <th>Preço Diário</th>
+                            <th>Categoria</th>
                             <th>Observações</th>
                             <th>Ações</th>
                         </tr>
@@ -400,6 +438,7 @@ export default function AdminItemsPage() {
                                 <td>{item.nome_item}</td>
                                 <td>{getAnuncianteName(item.anunciante_id)}</td>
                                 <td>R$ {item.preco_diario.toFixed(2)}</td>
+                                <td>{getCategoriaFormatada(item.categoria)}</td>
                                 <td className={styles.observacoes}>
                                     {item.observacoes || '-'}
                                 </td>

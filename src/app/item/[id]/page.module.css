@@ -65,8 +65,15 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--primary-color);
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   line-height: 1.2;
+}
+
+.categoria {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  font-weight: 500;
 }
 
 .anuncianteInfo {
