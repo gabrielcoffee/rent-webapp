@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import Header from '@/components/Header';
+import UserHeader from '@/components/UserHeader';
+import ImageModal from '@/components/ImageModal';
 import { ItensService, PessoasService, AvaliacoesService } from '@/services';
 import { Item, Pessoa, Avaliacao } from '@/services/types';
 import styles from './page.module.css';
@@ -17,6 +18,7 @@ export default function ItemPage() {
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -45,7 +47,7 @@ export default function ItemPage() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <Header showAdminNav={false} showBackButton backHref="/itens-publicados" />
+        <UserHeader showBackButton backHref="/catalogo" />
         <main className={styles.main}>
           <div className="text-center">
             <p>Carregando item...</p>
@@ -58,12 +60,12 @@ export default function ItemPage() {
   if (error || !item) {
     return (
       <div className={styles.container}>
-        <Header showAdminNav={false} showBackButton backHref="/itens-publicados" />
+        <UserHeader showBackButton backHref="/catalogo" />
         <main className={styles.main}>
           <div className={styles.notFound}>
             <h1>{error || 'Item não encontrado'}</h1>
             <p>O item que você está procurando não existe ou houve um erro ao carregá-lo.</p>
-            <Link href="/itens-publicados" className="btn btn-primary">
+            <Link href="/catalogo" className="btn btn-primary">
               Voltar para a lista
             </Link>
           </div>
@@ -134,11 +136,15 @@ export default function ItemPage() {
 
   return (
     <div className={styles.container}>
-      <Header showAdminNav={false} showBackButton backHref="/itens-publicados" />
+      <UserHeader showBackButton backHref="/catalogo" />
       
       <main className={styles.main}>
         <div className={styles.itemContainer}>
-          <div className={styles.itemImage}>
+          <div 
+            className={styles.itemImage}
+            onClick={() => item.foto_url && setIsImageModalOpen(true)}
+            style={{ cursor: item.foto_url ? 'pointer' : 'default' }}
+          >
             {item.foto_url ? (
               <img src={item.foto_url} alt={item.nome_item} />
             ) : (
@@ -247,6 +253,13 @@ export default function ItemPage() {
           )}
         </div>
       </main>
+
+      <ImageModal
+        isOpen={isImageModalOpen}
+        imageUrl={item.foto_url || ''}
+        altText={item.nome_item}
+        onClose={() => setIsImageModalOpen(false)}
+      />
     </div>
   );
 }

@@ -135,6 +135,7 @@
 .observacoes p {
   color: var(--gray-700);
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .avaliacoesResumo {

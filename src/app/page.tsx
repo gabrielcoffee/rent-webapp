@@ -103,7 +103,7 @@ export default function HomePage() {
                     scrollToTop()
                     }}
                 >
-                    <Image width={80} height={80} className={styles.logoImage} src="/assets/logo.png" alt="logo Rent" />
+                    <Image width={50} height={50} className={styles.logoImage} src="/assets/logo.png" alt="logo Rent" />
                     <h1 className={styles.logoText}>Rent Brasil</h1>
                 </a>
             </div>
@@ -127,7 +127,7 @@ export default function HomePage() {
               scrollToTop()
             }}
           >
-            <Image width={80} height={80} className={styles.logoImage} src="/assets/logo.png" alt="logo Rent" />
+            <Image width={50} height={50} className={styles.logoImage} src="/assets/logo.png" alt="logo Rent" />
             <h1 className={styles.logoText}>Rent Brasil</h1>
           </a>
 
@@ -168,12 +168,12 @@ export default function HomePage() {
 
 
             <div className={styles.heroButtonContainer}>
-                <a className={styles.heroButton} href="/itens-publicados" rel="noopener noreferrer">
-                    <button className={styles.outlineButton}><List size={20} /> Itens disponíveis</button>
+                <a className={styles.heroButton} href="/catalogo" rel="noopener noreferrer">
+                    <button className={styles.outlineButton}><List size={20} /> Catálogo</button>
                 </a>
 
-                <a className={styles.heroButton} href="https://wa.me/5541987865005" target="_blank" rel="noopener noreferrer">
-                    <button className={styles.outlineButton}><MessagesSquare size={20} /> Converse conosco</button>
+                <a className={styles.heroButton} href="https://wa.me/5541987865005?text=Olá gostaria de anunciar um item para aluguel." target="_blank" rel="noopener noreferrer">
+                    <button className={styles.outlineButton}><MessagesSquare size={20} /> Anuncie conosco!</button>
                 </a>
 
             </div>
@@ -395,7 +395,7 @@ export default function HomePage() {
 
               <div className={styles.socioCard}>
                 <Image src="/assets/gab.jpeg" alt="Foto da Equipe Rent" width={120} height={120} />
-                <div className={styles.socioNome}>Gabriel Fernandes Pereira</div>
+                <div className={styles.socioNome}>Gabriel Fernandes</div>
                 <div className={styles.socioDesc}>Bacharel em Engenharia de Software (PUC-PR), desenvolvedor full stack com experiência em arquitetura e soluções escaláveis.</div>
               </div>
 
@@ -579,9 +579,13 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <div className={styles.heroButtonContainer}>
+            <div className={styles.heroButtonContainer}>
+                <a className={styles.heroButton} href="/catalogo" rel="noopener noreferrer">
+                    <button className={styles.outlineButton}><List size={20} /> Catálogo</button>
+                </a>
+                
                 <a className={styles.heroButton} href="https://wa.me/5541987865005?text=Olá gostaria de anunciar um item para aluguel." target="_blank" rel="noopener noreferrer">
-                    <button className={styles.outlineButton}><MessagesSquare size={20} />Anuncie conosco!</button>
+                    <button className={styles.outlineButton}><MessagesSquare size={20} /> Anuncie conosco!</button>
                 </a>
             </div>
         </section>

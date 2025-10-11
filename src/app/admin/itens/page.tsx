@@ -64,12 +64,14 @@ export default function AdminItemsPage() {
         setEditingId(item.id);
         setFormData(item);
         setShowForm(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleCreate = () => {
         setEditingId(null);
         setFormData({});
         setShowForm(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleSave = async () => {
@@ -81,6 +83,9 @@ export default function AdminItemsPage() {
         try {
         setSaving(true);
         setError(null);
+
+        console.log('Salvando observações:', formData.observacoes);
+        console.log('Quebras de linha:', formData.observacoes?.split('\n').length);
 
         if (editingId) {
             await ItensService.update(editingId, formData);

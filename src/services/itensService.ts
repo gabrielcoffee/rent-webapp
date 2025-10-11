@@ -62,6 +62,8 @@ export class ItensService {
   }
 
   static async create(item: Omit<Item, 'id'>): Promise<Item> {
+    console.log('ItensService.create - Observações antes de salvar:', item.observacoes);
+    
     const { data, error } = await supabase
       .from('item')
       .insert([item])
@@ -73,10 +75,13 @@ export class ItensService {
       throw new Error('Falha ao criar item');
     }
 
+    console.log('ItensService.create - Observações depois de salvar:', data.observacoes);
     return data;
   }
 
   static async update(id: string, item: Partial<Omit<Item, 'id'>>): Promise<Item> {
+    console.log('ItensService.update - Observações antes de salvar:', item.observacoes);
+    
     const { data, error } = await supabase
       .from('item')
       .update(item)
@@ -89,6 +94,7 @@ export class ItensService {
       throw new Error('Falha ao atualizar item');
     }
 
+    console.log('ItensService.update - Observações depois de salvar:', data.observacoes);
     return data;
   }
 

@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import UserHeader from '@/components/UserHeader';
 import { ItensService, PessoasService, AvaliacoesService } from '@/services';
 import { Item, Pessoa, Avaliacao } from '@/services/types';
 import styles from './page.module.css';
-import Image from 'next/image';
 
 export default function ItemsPublicadosPage() {
     const [itens, setItens] = useState<Item[]>([]);
@@ -150,19 +150,9 @@ export default function ItemsPublicadosPage() {
 
     return (
         <div className={styles.container}>
-        <header className={styles.header}>
-            <div className={styles.headerContent}>
-
-                
-                <Image width={50} height={50} className={styles.logoImage} src="/assets/rent-icon-black.png" alt="logo Rent Black" />
-
-                <Link href="/" className={styles.logo}>
-                    Rent Brasil
-                </Link>
-            </div>
-        </header>
-        
-        <main className={styles.main}>
+            <UserHeader />
+            
+            <main className={styles.main}>
             <div className={styles.pageHeader}>
             <h1>Itens Disponíveis para Aluguel</h1>
             <p>Encontre o que você precisa para alugar</p>

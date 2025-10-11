@@ -28,7 +28,7 @@ rent-test/
 │   │   ├── itens/               # CRUD de itens
 │   │   └── locacoes/            # CRUD de locações
 │   ├── item/[id]/               # Página de detalhes do item
-│   ├── itens-publicados/        # Lista pública de itens
+│   ├── catalogo/        # Lista pública de itens
 │   ├── globals.css              # Estilos globais
 │   ├── layout.tsx               # Layout raiz
 │   └── page.tsx                 # Página inicial
@@ -101,7 +101,7 @@ rent-test/
 - Status de pagamento (pendente/pago)
 - Seleção de item e locatário
 
-### 🛍️ ItemsPublicadosPage (`/itens-publicados`)
+### 🛍️ ItemsPublicadosPage (`/catalogo`)
 - Lista pública de itens disponíveis
 - Filtros de busca e ordenação
 - Cards com foto, preço e avaliações
