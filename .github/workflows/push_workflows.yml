@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Clone Repository
-        uses: github/checkout@v3
+        uses: actions/checkout@v3
       - name: Install Dependencies
         run: |
-          echo: "Running: Installing Dependencies"
+          echo "Running: Installing Dependencies"
           npm install
       - name: Run Linting
         run: |
-          echo: "Running Linting Tests"
+          echo "Running Linting Tests"
           npm run lint
         env: 
           CI: true
