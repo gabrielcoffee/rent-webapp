@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, BarChart3, Users, Package, Calendar, Star, LogOut } from 'lucide-react';
+import { Menu, X, BarChart3, Users, Building2, Package, Calendar, Star, ClipboardList, LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './styles/Header.module.css';
 import Image from 'next/image';
@@ -69,6 +69,13 @@ export default function Header({
                 Dashboard
               </Link>
               <Link 
+                href="/admin/condominios" 
+                className={`${styles.navLink} ${pathname === '/admin/condominios' ? styles.active : ''}`}
+              >
+                <Building2 size={16} />
+                Condomínios
+              </Link>
+              <Link 
                 href="/admin/pessoas" 
                 className={`${styles.navLink} ${pathname === '/admin/pessoas' ? styles.active : ''}`}
               >
@@ -95,6 +102,13 @@ export default function Header({
               >
                 <Star size={16} />
                 Avaliações
+              </Link>
+              <Link
+                href="/admin/requisicoes"
+                className={`${styles.navLink} ${pathname === '/admin/requisicoes' ? styles.active : ''}`}
+              >
+                <ClipboardList size={16} />
+                Requisições
               </Link>
             </nav>
             
@@ -138,6 +152,14 @@ export default function Header({
                 Dashboard
               </Link>
               <Link 
+                href="/admin/condominios" 
+                className={`${styles.mobileNavLink} ${pathname === '/admin/condominios' ? styles.active : ''}`}
+                onClick={closeMobileMenu}
+              >
+                <Building2 size={16} />
+                Condomínios
+              </Link>
+              <Link 
                 href="/admin/pessoas" 
                 className={`${styles.mobileNavLink} ${pathname === '/admin/pessoas' ? styles.active : ''}`}
                 onClick={closeMobileMenu}
@@ -168,6 +190,14 @@ export default function Header({
               >
                 <Star size={16} />
                 Avaliações
+              </Link>
+              <Link
+                href="/admin/requisicoes"
+                className={`${styles.mobileNavLink} ${pathname === '/admin/requisicoes' ? styles.active : ''}`}
+                onClick={closeMobileMenu}
+              >
+                <ClipboardList size={16} />
+                Requisições
               </Link>
               
               {user && (

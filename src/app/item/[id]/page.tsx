@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import UserHeader from '@/components/UserHeader';
 import ImageModal from '@/components/ImageModal';
-import { ItensService, PessoasService, AvaliacoesService } from '@/services';
-import { Item, Pessoa, Avaliacao } from '@/services/types';
+import { ItensService, PessoasService, AvaliacoesService, CondominiosService } from '@/services';
+import { Item, Pessoa, Avaliacao, Condominio } from '@/services/types';
 import styles from './page.module.css';
 
 export default function ItemPage() {
@@ -15,6 +15,7 @@ export default function ItemPage() {
   
   const [item, setItem] = useState<Item | null>(null);
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
+  const [condominios, setCondominios] = useState<Condominio[]>([]);
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,13 +29,15 @@ export default function ItemPage() {
     try {
       setLoading(true);
       setError(null);
-      const [itemData, pessoasData, avaliacoesData] = await Promise.all([
+      const [itemData, pessoasData, condominiosData, avaliacoesData] = await Promise.all([
         ItensService.getById(itemId),
         PessoasService.getAll(),
+        CondominiosService.getAll(),
         AvaliacoesService.getByItemId(itemId)
       ]);
       setItem(itemData);
       setPessoas(pessoasData);
+      setCondominios(condominiosData);
       setAvaliacoes(avaliacoesData);
     } catch (err) {
       setError('Erro ao carregar dados do item');
@@ -76,6 +79,11 @@ export default function ItemPage() {
 
   const anunciante = pessoas.find(p => p.id === item.anunciante_id);
   const itemAvaliacoes = avaliacoes;
+
+  const getCondominioName = (condominioId: string) => {
+    const condominio = condominios.find((c) => c.id === condominioId);
+    return condominio ? condominio.nome : 'N/A';
+  };
   
   const categorias: { [key: string]: string } = {
     'eletronicos_e_acessorios': 'Eletrônicos e Acessórios',
@@ -166,7 +174,7 @@ export default function ItemPage() {
             <div className={styles.anuncianteInfo}>
               <p className={styles.anuncianteText}>
                 {anunciante?.nome_pessoa || 'N/A'}
-                {anunciante && <span className={styles.apartamento}> • Apt {anunciante.apartamento}</span>}
+                {anunciante && <span className={styles.apartamento}> • {getCondominioName(anunciante.condominio_id)}</span>}
               </p>
             </div>
             

@@ -234,7 +234,7 @@ export default function AdminLocacoesPage() {
                     <option value="">Selecione um locatário</option>
                     {pessoas.map(pessoa => (
                         <option key={pessoa.id} value={pessoa.id}>
-                        {pessoa.nome_pessoa} - Apt {pessoa.apartamento}
+                        {pessoa.nome_pessoa}{pessoa.apartamento ? ` - Apt ${pessoa.apartamento}` : ''}
                         </option>
                     ))}
                     </select>

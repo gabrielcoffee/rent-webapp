@@ -1,7 +1,7 @@
 import { supabase } from '@/client/supabase';
 
 export class ImageUploadService {
-    static async uploadItemImage(file: File, itemName: string): Promise<string> {
+    private static async uploadToBucket(file: File, baseName: string, bucketName: string): Promise<string> {
         try {
             // 1. Validar tamanho (máximo 5MB)
             if (file.size > 5 * 1024 * 1024) {
@@ -17,12 +17,12 @@ export class ImageUploadService {
             // 3. Converter para WebP se necessário (melhor compressão)
             const processedFile = await this.convertToWebP(file);
 
-            // 4. Gerar nome do arquivo baseado no nome do item
-            const fileName = this.generateFileName(itemName);
+            // 4. Gerar nome do arquivo baseado no nome
+            const fileName = this.generateFileName(baseName);
 
             // 5. Upload para Supabase Storage
-            const { data, error } = await supabase.storage
-                .from('item-images')
+            const { error } = await supabase.storage
+                .from(bucketName)
                 .upload(fileName, processedFile, {
                     cacheControl: '3600',
                     upsert: true // Sobrescreve se já existir
@@ -35,15 +35,22 @@ export class ImageUploadService {
 
             // 6. Retornar URL pública
             const { data: publicData } = supabase.storage
-                .from('item-images')
+                .from(bucketName)
                 .getPublicUrl(fileName);
 
             return publicData.publicUrl;
-
         } catch (error) {
             console.error('Erro no upload da imagem:', error);
             throw error;
         }
+    }
+
+    static async uploadItemImage(file: File, itemName: string): Promise<string> {
+        return await this.uploadToBucket(file, itemName, 'item-images');
+    }
+
+    static async uploadCondominioImage(file: File, condominioName: string): Promise<string> {
+        return await this.uploadToBucket(file, condominioName, 'condominio-images');
     }
 
     private static async convertToWebP(file: File): Promise<File> {

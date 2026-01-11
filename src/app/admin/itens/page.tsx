@@ -252,7 +252,7 @@ export default function AdminItemsPage() {
                     <option value="">Selecione um anunciante</option>
                     {pessoas.map(pessoa => (
                         <option key={pessoa.id} value={pessoa.id}>
-                        {pessoa.nome_pessoa} - Apt {pessoa.apartamento}
+                        {pessoa.nome_pessoa}{pessoa.apartamento ? ` - Apt ${pessoa.apartamento}` : ''}
                         </option>
                     ))}
                     </select>

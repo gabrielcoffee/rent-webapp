@@ -3,7 +3,15 @@ export interface Pessoa {
   nome_pessoa: string;
   email?: string;
   telefone: string;
-  apartamento: string;
+  apartamento?: string;
+  condominio_id: string;
+}
+
+export interface Condominio {
+  id: string;
+  nome: string;
+  endereco: string;
+  foto_url?: string;
 }
 
 export interface Item {
@@ -14,6 +22,14 @@ export interface Item {
   preco_diario: number;
   observacoes?: string;
   categoria?: string;
+}
+
+export interface Requisicao {
+  id: string;
+  usuario_id: string;
+  nome_item: string;
+  foto_url?: string;
+  pretende_pagar_diario?: number;
 }
 
 export interface Locacao {

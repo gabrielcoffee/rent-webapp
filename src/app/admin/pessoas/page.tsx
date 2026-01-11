@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import ItemCard from '@/components/ItemCard';
 import Modal from '@/components/Modal';
-import { PessoasService } from '@/services';
-import { Pessoa } from '@/services/types';
+import { CondominiosService, PessoasService } from '@/services';
+import { Condominio, Pessoa } from '@/services/types';
 import styles from './page.module.css';
 
 export default function AdminPessoasPage() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
+  const [condominios, setCondominios] = useState<Condominio[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Pessoa>>({});
   const [showForm, setShowForm] = useState(false);
@@ -21,15 +22,19 @@ export default function AdminPessoasPage() {
 
   // Carregar dados do Supabase
   useEffect(() => {
-    loadPessoas();
+    loadData();
   }, []);
 
-  const loadPessoas = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await PessoasService.getAll();
-      setPessoas(data);
+      const [pessoasData, condominiosData] = await Promise.all([
+        PessoasService.getAll(),
+        CondominiosService.getAll(),
+      ]);
+      setPessoas(pessoasData);
+      setCondominios(condominiosData);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro ao carregar pessoas';
       setError(errorMessage);
@@ -37,6 +42,11 @@ export default function AdminPessoasPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const getCondominioName = (condominioId: string) => {
+    const condominio = condominios.find((c) => c.id === condominioId);
+    return condominio ? condominio.nome : 'N/A';
   };
 
   const handleEdit = (pessoa: Pessoa) => {
@@ -52,8 +62,8 @@ export default function AdminPessoasPage() {
   };
 
   const handleSave = async () => {
-    if (!formData.nome_pessoa || !formData.telefone || !formData.apartamento) {
-      setError('Nome, telefone e apartamento são obrigatórios');
+    if (!formData.nome_pessoa || !formData.telefone || !formData.condominio_id) {
+      setError('Nome, telefone e condomínio são obrigatórios');
       return;
     }
 
@@ -70,7 +80,7 @@ export default function AdminPessoasPage() {
       }
 
       // Recarregar dados
-      await loadPessoas();
+      await loadData();
       
       setShowForm(false);
       setEditingId(null);
@@ -98,7 +108,7 @@ export default function AdminPessoasPage() {
       await PessoasService.delete(itemToDelete.id);
       
       // Recarregar dados
-      await loadPessoas();
+      await loadData();
       
       setItemToDelete(null);
       setModalOpen(false);
@@ -188,13 +198,29 @@ export default function AdminPessoasPage() {
               </div>
               
               <div>
-                <label>Apartamento *</label>
+                <label>Condomínio *</label>
+                <select
+                  className="input"
+                  value={formData.condominio_id || ''}
+                  onChange={(e) => setFormData({ ...formData, condominio_id: e.target.value })}
+                >
+                  <option value="">Selecione um condomínio</option>
+                  {condominios.map((condominio) => (
+                    <option key={condominio.id} value={condominio.id}>
+                      {condominio.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label>Apartamento</label>
                 <input
                   type="text"
                   className="input"
                   value={formData.apartamento || ''}
                   onChange={(e) => setFormData({ ...formData, apartamento: e.target.value })}
-                  placeholder="101"
+                  placeholder="101 (opcional)"
                 />
               </div>
             </div>
@@ -228,6 +254,11 @@ export default function AdminPessoasPage() {
                         { key: 'nome_pessoa', label: 'Nome' },
                         { key: 'email', label: 'Email' },
                         { key: 'telefone', label: 'Telefone' },
+                        { 
+                          key: 'condominio_id', 
+                          label: 'Condomínio',
+                          render: (value) => getCondominioName(value)
+                        },
                         { key: 'apartamento', label: 'Apartamento' }
                     ]}
                     onEdit={handleEdit as any}
@@ -244,6 +275,7 @@ export default function AdminPessoasPage() {
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Telefone</th>
+                        <th>Condomínio</th>
                         <th>Apartamento</th>
                         <th>Ações</th>
                     </tr>
@@ -254,7 +286,8 @@ export default function AdminPessoasPage() {
                             <td>{pessoa.nome_pessoa}</td>
                             <td>{pessoa.email || '-'}</td>
                             <td>{pessoa.telefone}</td>
-                            <td>{pessoa.apartamento}</td>
+                            <td>{getCondominioName(pessoa.condominio_id)}</td>
+                            <td>{pessoa.apartamento || '-'}</td>
                             <td>
                                 <div className={styles.actions}>
                                     <button 

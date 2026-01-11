@@ -30,8 +30,35 @@
     text-decoration: none;
 }
 
-.backButton {
+.actions {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navButton {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary-color);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    border: 1px solid var(--gray-200);
+    background-color: var(--white);
+}
+
+.navButton:hover {
+    background-color: var(--gray-100);
+}
+
+.navButton:disabled {
+    cursor: default;
+    opacity: 0.85;
+}
+
+.backButton {
     font-size: 16px;
     font-weight: 500;
     color: var(--primary-color);
@@ -52,6 +79,11 @@
 
     .logo {
         font-size: 20px;
+    }
+
+    .navButton {
+        font-size: 14px;
+        padding: 6px 12px;
     }
 
     .backButton {

@@ -1,16 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import UserHeader from '@/components/UserHeader';
-import { ItensService, PessoasService, AvaliacoesService } from '@/services';
-import { Item, Pessoa, Avaliacao } from '@/services/types';
+import { ItensService, PessoasService, AvaliacoesService, CondominiosService } from '@/services';
+import { Item, Pessoa, Avaliacao, Condominio } from '@/services/types';
 import styles from './page.module.css';
+
+const SELECTED_CONDOMINIO_STORAGE_KEY = 'rent_selected_condominio_id';
+const CONDOMINIO_CHANGED_EVENT = 'rent-condominio-changed';
+const OPEN_CONDOMINIO_SELECTOR_EVENT = 'rent-open-condominio-selector';
 
 export default function ItemsPublicadosPage() {
     const [itens, setItens] = useState<Item[]>([]);
     const [pessoas, setPessoas] = useState<Pessoa[]>([]);
     const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
+    const [condominios, setCondominios] = useState<Condominio[]>([]);
+    const [selectedCondominioId, setSelectedCondominioId] = useState<string>('');
+    const [isCondominioModalOpen, setIsCondominioModalOpen] = useState(false);
     const [filtro, setFiltro] = useState('');
     const [ordenacao, setOrdenacao] = useState<'nome' | 'preco' | 'avaliacao'>('preco');
     const [categoriaFiltro, setCategoriaFiltro] = useState<string>('todas');
@@ -35,20 +42,35 @@ export default function ItemsPublicadosPage() {
         loadData();
     }, []);
 
+    useEffect(() => {
+        const readSelected = () => setSelectedCondominioId(localStorage.getItem(SELECTED_CONDOMINIO_STORAGE_KEY) || '');
+        readSelected();
+        window.addEventListener(CONDOMINIO_CHANGED_EVENT, readSelected);
+        return () => window.removeEventListener(CONDOMINIO_CHANGED_EVENT, readSelected);
+    }, []);
+
+    useEffect(() => {
+        const openSelector = () => setIsCondominioModalOpen(true);
+        window.addEventListener(OPEN_CONDOMINIO_SELECTOR_EVENT, openSelector);
+        return () => window.removeEventListener(OPEN_CONDOMINIO_SELECTOR_EVENT, openSelector);
+    }, []);
+
     const loadData = async () => {
         try {
         setLoading(true);
         setError(null);
         
         // Carregar dados em paralelo
-        const [itensData, pessoasData, avaliacoesData] = await Promise.all([
+        const [itensData, pessoasData, avaliacoesData, condominiosData] = await Promise.all([
             ItensService.getAll(),
             PessoasService.getAll(),
-            AvaliacoesService.getAll()
+            AvaliacoesService.getAll(),
+            CondominiosService.getAll(),
         ]);
         setItens(itensData);
         setPessoas(pessoasData);
         setAvaliacoes(avaliacoesData);
+        setCondominios(condominiosData);
         } catch (err) {
         setError('Erro ao carregar dados');
         console.error('Erro ao carregar dados:', err);
@@ -73,8 +95,38 @@ export default function ItemsPublicadosPage() {
         return avaliacoes.filter(av => av.item_id === itemId).length;
     };
 
+    const selectedCondominio = useMemo(
+        () => condominios.find((c) => c.id === selectedCondominioId),
+        [condominios, selectedCondominioId],
+    );
+
+    const shouldForceSelectCondominio = condominios.length > 0 && !selectedCondominio;
+
+    useEffect(() => {
+        if (shouldForceSelectCondominio) setIsCondominioModalOpen(true);
+    }, [shouldForceSelectCondominio]);
+
+    const handleSelectCondominio = (condominioId: string) => {
+        localStorage.setItem(SELECTED_CONDOMINIO_STORAGE_KEY, condominioId);
+        setSelectedCondominioId(condominioId);
+        window.dispatchEvent(new Event(CONDOMINIO_CHANGED_EVENT));
+        setIsCondominioModalOpen(false);
+    };
+
+    const pessoasById = useMemo(() => {
+        const m = new Map<string, Pessoa>();
+        pessoas.forEach((p) => m.set(p.id, p));
+        return m;
+    }, [pessoas]);
+
     const itensFiltrados = itens
-        .filter(item => {
+        .filter((item) => {
+            // se não há condomínio selecionado, não mostra itens (overlay vai aparecer)
+            if (!selectedCondominio) return false;
+
+            const anunciante = pessoasById.get(item.anunciante_id);
+            if (!anunciante || anunciante.condominio_id !== selectedCondominio.id) return false;
+
             const matchesSearch = item.nome_item.toLowerCase().includes(filtro.toLowerCase()) ||
                 item.observacoes?.toLowerCase().includes(filtro.toLowerCase());
             const matchesCategory = categoriaFiltro === 'todas' || item.categoria === categoriaFiltro;
@@ -105,6 +157,13 @@ export default function ItemsPublicadosPage() {
         }
         
         return stars.join('');
+    };
+
+    const handlePedirItemWhatsApp = () => {
+        const mensagem = 'Gostaria de pedir o seguinte item: ';
+        const telefoneEmpresa = '5541987865005';
+        const url = `https://wa.me/${telefoneEmpresa}?text=${encodeURIComponent(mensagem)}`;
+        window.open(url, '_blank');
     };
 
     if (loading) {
@@ -153,47 +212,116 @@ export default function ItemsPublicadosPage() {
             <UserHeader />
             
             <main className={styles.main}>
-            <div className={styles.pageHeader}>
-            <h1>Itens Disponíveis para Aluguel</h1>
-            <p>Encontre o que você precisa para alugar</p>
-            </div>
+            {selectedCondominio && (
+                <div className={styles.condominioHeader}>
+                    <div className={styles.condominioHeaderInner}>
+                        <div className={styles.condominioHeaderImage}>
+                            {selectedCondominio.foto_url ? (
+                                <img src={selectedCondominio.foto_url} alt={selectedCondominio.nome} />
+                            ) : (
+                                <div className={styles.condominioHeaderPlaceholder}>🏢</div>
+                            )}
+                        </div>
+                        <div className={styles.condominioHeaderText}>
+                            <div className={styles.condominioNameLine}>{selectedCondominio.nome}</div>
+                            <h1>Itens Disponíveis para Aluguel</h1>
+                            <p>Encontre o que você precisa para alugar</p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
-            <div className={styles.filters}>
-            <div className={styles.searchBox}>
-                <input
-                type="text"
-                placeholder="Buscar itens..."
-                className="input"
-                value={filtro}
-                onChange={(e) => setFiltro(e.target.value)}
-                />
-            </div>
-            
-            <div className={styles.sortBox}>
-                <label>Ordenar por:</label>
-                <select
-                className="input"
-                value={ordenacao}
-                onChange={(e) => setOrdenacao(e.target.value as 'nome' | 'preco' | 'avaliacao')}
-                >
-                <option value="nome">Nome</option>
-                <option value="preco">Preço</option>
-                <option value="avaliacao">Avaliação</option>
-                </select>
-            </div>
+            {isCondominioModalOpen && (
+                <div className={styles.selectOverlay} role="dialog" aria-modal="true">
+                    <button
+                        type="button"
+                        className={styles.selectOverlayBackdrop}
+                        aria-label="Fechar"
+                        onClick={() => setIsCondominioModalOpen(false)}
+                    />
+                    <div className={styles.selectOverlayContent}>
+                        <button
+                            type="button"
+                            className={styles.selectOverlayClose}
+                            aria-label="Fechar"
+                            onClick={() => setIsCondominioModalOpen(false)}
+                        >
+                            ×
+                        </button>
+                        <h2 className={styles.selectOverlayTitle}>Escolha o condomínio</h2>
+                        <div className={styles.condominioGrid}>
+                            {condominios.map((c) => (
+                                <button
+                                    key={c.id}
+                                    type="button"
+                                    className={styles.condominioCard}
+                                    onClick={() => handleSelectCondominio(c.id)}
+                                >
+                                    <div className={styles.condominioCardImage}>
+                                        {c.foto_url ? (
+                                            <img src={c.foto_url} alt={c.nome} />
+                                        ) : (
+                                            <div className={styles.condominioCardPlaceholder}>🏢</div>
+                                        )}
+                                    </div>
+                                    <div className={styles.condominioCardName}>{c.nome}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
-            <div className={styles.sortBox}>
-                <label>Categoria:</label>
-                <select
-                className="input"
-                value={categoriaFiltro}
-                onChange={(e) => setCategoriaFiltro(e.target.value)}
-                >
-                {Object.entries(categorias).map(([key, value]) => (
-                    <option key={key} value={key}>{value}</option>
-                ))}
-                </select>
-            </div>
+            <div className={styles.filtersRow}>
+                <div className={styles.filters}>
+                    <div className={styles.searchBox}>
+                        <input
+                            type="text"
+                            placeholder="Buscar itens..."
+                            className="input"
+                            value={filtro}
+                            onChange={(e) => setFiltro(e.target.value)}
+                        />
+                    </div>
+                    
+                    <div className={styles.sortBox}>
+                        <label>Ordenar por:</label>
+                        <select
+                            className="input"
+                            value={ordenacao}
+                            onChange={(e) => setOrdenacao(e.target.value as 'nome' | 'preco' | 'avaliacao')}
+                        >
+                            <option value="nome">Nome</option>
+                            <option value="preco">Preço</option>
+                            <option value="avaliacao">Avaliação</option>
+                        </select>
+                    </div>
+
+                    <div className={styles.sortBox}>
+                        <label>Categoria:</label>
+                        <select
+                            className="input"
+                            value={categoriaFiltro}
+                            onChange={(e) => setCategoriaFiltro(e.target.value)}
+                        >
+                            {Object.entries(categorias).map(([key, value]) => (
+                                <option key={key} value={key}>{value}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className={styles.pedirCtaInline}>
+                    <span className={styles.pedirLabel}>Não encontrou o que queria?</span>
+                    <button onClick={handlePedirItemWhatsApp} className={`btn ${styles.pedirBtn}`}>
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1198px-WhatsApp.svg.png"
+                            alt="WhatsApp"
+                            className={styles.whatsappIcon}
+                        />
+                        Pedir item
+                    </button>
+                </div>
             </div>
 
             <div className={styles.itemsGrid}>
@@ -245,12 +373,31 @@ export default function ItemsPublicadosPage() {
             })}
             </div>
 
-            {itensFiltrados.length === 0 && (
+            {!selectedCondominio && !isCondominioModalOpen && (
+                <div className={styles.emptyState}>
+                    <h3>Selecione um condomínio</h3>
+                    <p>Clique em “Selecionar Condomínio” no topo para escolher antes de ver os itens.</p>
+                </div>
+            )}
+
+            {selectedCondominio && itensFiltrados.length === 0 && (
             <div className={styles.emptyState}>
                 <h3>Nenhum item encontrado</h3>
                 <p>Tente ajustar os filtros de busca</p>
             </div>
             )}
+
+            <div className={styles.pedirCtaBottom}>
+                <span className={styles.pedirLabel}>Não encontrou o que queria?</span>
+                <button onClick={handlePedirItemWhatsApp} className={`btn ${styles.pedirBtn}`}>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1198px-WhatsApp.svg.png"
+                        alt="WhatsApp"
+                        className={styles.whatsappIcon}
+                    />
+                    Pedir item
+                </button>
+            </div>
         </main>
         </div>
     );
