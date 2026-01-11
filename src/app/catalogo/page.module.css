@@ -434,6 +434,27 @@
   .condominioHeaderText p {
     font-size: 0.95rem;
   }
+
+  /* Condomínio selection modal: smaller cards + scroll */
+  .selectOverlay {
+    padding: 12px;
+  }
+
+  .selectOverlayContent {
+    padding: 16px;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+  }
+
+  .condominioGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .condominioCardName {
+    padding: 10px 10px 12px;
+    font-size: 0.95rem;
+  }
   
   .filtersRow {
     flex-direction: column;
